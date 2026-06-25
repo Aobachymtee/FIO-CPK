@@ -1,4 +1,4 @@
-# Don't change this `name` below, the script might broke at some point
+# Don't change this `name` below, the script might broke at some point, ok
 name: "init banner"
 on:
    workflow_dispatch:
