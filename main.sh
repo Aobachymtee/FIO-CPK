@@ -93,7 +93,7 @@ fi
 
 # Refer to config.conf
 message="$(eval "printf '%s' \"$(sed -E 's_\{\\n\}_\n_g;s_(\{[^\x7d]*\})_\$\1_g' <<< "${message}"\")")"
-
+#
 if [[ -n "${album}" ]]; then
   album_photo_id="$(post_album_unpublished "${prev_frame}" | jq -r '.id')" || failed "${prev_frame}" "${episode}"
 
