@@ -38,14 +38,13 @@ post_fp(){
 }
 
 post_album(){
-	curl -sfLX POST \
-		--retry 2 \
-		--retry-connrefused \
-		--retry-delay 7 \
-		-F "source=@${FRMENV_FRAME_LOCATION}/frame_${1}.jpg" \
-		-F "message=${message}" \
-		-o /dev/null \
-	"${FRMENV_API_ORIGIN}/${album}/photos?access_token=${FRMENV_FBTOKEN}&published=1" || return 1
+  curl -sfLX POST \
+    --retry 2 \
+    --retry-connrefused \
+    --retry-delay 7 \
+    -F "source=@${FRMENV_FRAME_LOCATION}/frame_${1}.jpg" \
+    -F "message=${message}" \
+    "${FRMENV_API_ORIGIN}/${FRMENV_FBAPI_VER}/${album}/photos?access_token=${FRMENV_FBTOKEN}&published=1"
 }
 
 post_subs(){
