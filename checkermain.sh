@@ -69,6 +69,8 @@ frames_check(){
 
 token_check(){
 	check_name="$(curl -sLf "${FRMENV_API_ORIGIN}/me?fields=name&access_token=${1}" | jq -r .name)" || true
+	printf 'DEBUG expected page_name: [%s]\n' "${page_name}" >&2
+	printf 'DEBUG token returned name: [%s]\n' "${check_name}" >&2
 	if [[ -n "${page_name}" ]] && [[ "${check_name}" = "${page_name}" ]]; then
 		format_table "fb_token" "$(format_noerr "Token is Working")"
 	else
