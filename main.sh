@@ -94,10 +94,21 @@ fi
 # Refer to config.conf
 message="$(eval "printf '%s' \"$(sed -E 's_\{\\n\}_\n_g;s_(\{[^\x7d]*\})_\$\1_g' <<< "${message}"\")")"
 
-post_id="$(post_fp "${prev_frame}" | grep -Po '(?=[0-9])(.*)(?=\",\")')" || failed "${prev_frame}" "${episode}"
+if [[ -n "${album}" ]]; then
+  album_photo_id="$(post_album_unpublished "${prev_frame}" | jq -r '.id')" || failed "${prev_frame}" "${episode}"
 
-# Post images in Albums
-[[ -z "${album}" ]] || post_album "${prev_frame}"
+  if [[ -z "${album_photo_id}" || "${album_photo_id}" = "null" ]]; then
+    failed "${prev_frame}" "${episode}"
+  fi
+
+  post_id="$(post_feed_attached_photo "${album_photo_id}" | jq -r '.id')" || failed "${prev_frame}" "${episode}"
+
+  if [[ -z "${post_id}" || "${post_id}" = "null" ]]; then
+    failed "${prev_frame}" "${episode}"
+  fi
+else
+  post_id="$(post_fp "${prev_frame}" | jq -r '.id')" || failed "${prev_frame}" "${episode}"
+fi
 
 # Addons, Random Crop from frame
 if [[ "${rand_post}" = "1" ]]; then
