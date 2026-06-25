@@ -6,24 +6,23 @@ on:
 jobs:
   trigger:
     runs-on: ubuntu-24.04
-    
     steps:
-    - name: "checkout"
-      uses: actions/checkout@v5
-    
-    - name: execute
-      run: |
-        gh workflow run process.yml --repo ${{ github.repository }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GIT_TOK }}
-        
-    - name: delay
-      run: |
-        post_int="$(sed -nE 's|.*posting_interval="([0-9]+)".*|\1|p' ./config.conf)"
-        sleep "$(( 3600 * ${post_int:-2} ))"
-      
-    - name: next
-      run: |
-        gh workflow run trigger.yml --repo ${{ github.repository }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GIT_TOK }}
+      - name: "checkout"
+        uses: actions/checkout@v5
+
+      - name: execute
+        run: |
+          gh workflow run process.yml --repo ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOK }}
+
+      - name: delay
+        run: |
+          post_int="$(sed -nE 's|.*posting_interval="([0-9]+)".*|\1|p' ./config.conf)"
+          sleep "$(( 3600 * ${post_int:-2} ))"
+
+      - name: next
+        run: |
+          gh workflow run trigger.yml --repo ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOK }}
