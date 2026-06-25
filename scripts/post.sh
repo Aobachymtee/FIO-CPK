@@ -48,6 +48,29 @@ post_album(){
     "${FRMENV_API_ORIGIN}/${FRMENV_FBAPI_VER}/${album}/photos?access_token=${FRMENV_FBTOKEN}&published=1"
 }
 
+###################
+post_album_unpublished(){
+  curl -sfLX POST \
+    --retry 2 \
+    --retry-connrefused \
+    --retry-delay 7 \
+    -F "source=@${FRMENV_FRAME_LOCATION}/frame_${1}.jpg" \
+    -F "message=${message}" \
+    -F "published=false" \
+    "${FRMENV_API_ORIGIN}/${FRMENV_FBAPI_VER}/${album}/photos?access_token=${FRMENV_FBTOKEN}"
+}
+
+post_feed_attached_photo(){
+  curl -sfLX POST \
+    --retry 2 \
+    --retry-connrefused \
+    --retry-delay 7 \
+    --data-urlencode "message=${message}" \
+    -d "attached_media[0]={\"media_fbid\":\"${1}\"}" \
+    "${FRMENV_API_ORIGIN}/${FRMENV_FBAPI_VER}/me/feed?access_token=${FRMENV_FBTOKEN}"
+}
+###################
+
 post_subs(){
 	curl -sfLX POST \
 		--retry 2 \
